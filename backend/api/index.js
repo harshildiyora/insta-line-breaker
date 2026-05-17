@@ -7,10 +7,10 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import morgan from 'morgan';
 
-import authRoutes from './routes/auth.js';
-import historyRoutes from './routes/history.js';
-import globalErrorHandler from './middleware/errorMiddleware.js';
-import AppError from './utils/AppError.js';
+import authRoutes from '../routes/auth.js';
+import historyRoutes from '../routes/history.js';
+import globalErrorHandler from '../middleware/errorMiddleware.js';
+import AppError from '../utils/AppError.js';
 
 dotenv.config();
 
