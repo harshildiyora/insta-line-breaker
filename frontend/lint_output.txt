@@ -1,0 +1,79 @@
+﻿
+> frontend@0.0.0 lint
+> eslint .
+
+
+C:\Harshil\antigravity\insta-lne-breaker\frontend\src\App.jsx
+  1:8  error  'React' is defined but never used  no-unused-vars
+
+C:\Harshil\antigravity\insta-lne-breaker\frontend\src\context\Providers.jsx
+  42:5   error  Error: This value cannot be modified
+
+Modifying a variable defined outside a component or hook is not allowed. Consider using an effect.
+
+  40 |
+  41 |   if (token) {
+> 42 |     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value cannot be modified
+  43 |   } else {
+  44 |     delete axios.defaults.headers.common['Authorization'];
+  45 |   }              react-hooks/immutability
+  44:12  error  Error: This value cannot be modified
+
+Modifying a variable defined outside a component or hook is not allowed. Consider using an effect.
+
+  42 |     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  43 |   } else {
+> 44 |     delete axios.defaults.headers.common['Authorization'];
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value cannot be modified
+  45 |   }
+  46 |
+  47 |   useEffect(() => {  react-hooks/immutability
+
+C:\Harshil\antigravity\insta-lne-breaker\frontend\src\main.jsx
+  10:4  error  'React' is not defined  no-undef
+
+C:\Harshil\antigravity\insta-lne-breaker\frontend\src\pages\HistoryPage.jsx
+  12:5   error  Error: Cannot access variable before it is declared
+
+`fetchHistory` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  10 |
+  11 |   useEffect(() => {
+> 12 |     fetchHistory();
+     |     ^^^^^^^^^^^^ `fetchHistory` accessed before it is declared
+  13 |   }, []);
+  14 |
+  15 |   const fetchHistory = async () => {
+
+  13 |   }, []);
+  14 |
+> 15 |   const fetchHistory = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 16 |     try {
+     | ^^^^^^^^^
+> 17 |       const res = await axios.get(`${import.meta.env.VITE_API_URL}/history`);
+     | ^^^^^^^^^
+> 18 |       setHistory(res.data.data.history);
+     | ^^^^^^^^^
+> 19 |     } catch (err) {
+     | ^^^^^^^^^
+> 20 |       setMessage('Failed to load history');
+     | ^^^^^^^^^
+> 21 |     } finally {
+     | ^^^^^^^^^
+> 22 |       setLoading(false);
+     | ^^^^^^^^^
+> 23 |     }
+     | ^^^^^^^^^
+> 24 |   };
+     | ^^^^^ `fetchHistory` is declared here
+  25 |
+  26 |   const handleDelete = async (id) => {
+  27 |     if (!window.confirm('Are you sure you want to delete this draft?')) return;  react-hooks/immutability
+  19:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+  34:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+  45:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+
+Γ£û 8 problems (8 errors, 0 warnings)
+
