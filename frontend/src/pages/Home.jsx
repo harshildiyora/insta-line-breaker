@@ -14,6 +14,7 @@ const Home = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [message, setMessage] = useState('');
   const [editingId, setEditingId] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef(null);
   const { user, token } = useAuth();
   const location = useLocation();
@@ -132,7 +133,9 @@ const Home = () => {
       setTimeout(() => setMessage(''), 3000);
       return;
     }
+    if (isSaving) return;
 
+    setIsSaving(true);
     try {
       const finalContent = convertLineBreaks(text);
       
@@ -143,16 +146,19 @@ const Home = () => {
         });
         setMessage('Draft updated successfully!');
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL}/history`, {
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/history`, {
           title: title || 'Untitled Draft',
           content: finalContent
         });
+        setEditingId(res.data.data.history._id);
         setMessage('Draft saved successfully!');
       }
       setTimeout(() => setMessage(''), 3000);
     } catch {
       setMessage('Failed to save draft');
       setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -250,8 +256,8 @@ const Home = () => {
             </button>
           </div>
           <div className="footer-actions">
-            <button onClick={handleSave} className="btn-secondary btn-icon">
-              <Save size={18} /> Save Draft
+            <button onClick={handleSave} disabled={isSaving} className="btn-secondary btn-icon">
+              <Save size={18} /> {isSaving ? 'Saving...' : 'Save Draft'}
             </button>
             <button onClick={handleCopy} className="btn-primary btn-icon">
               <Copy size={18} /> {isCopied ? 'Copied!' : 'Copy & Convert'}
