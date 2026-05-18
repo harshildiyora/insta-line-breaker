@@ -55,8 +55,12 @@ const HistoryPage = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    // If invalid date, return empty
+    if (isNaN(date.getTime())) return '';
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, options);
   };
 
   if (loading) {
@@ -83,8 +87,19 @@ const HistoryPage = () => {
           {history.map((item) => (
             <div key={item._id} className="history-card glass-panel">
               <div className="history-card-header">
-                <h3 className="history-title">{item.title}</h3>
-                <span className="history-date">{formatDate(item.createdAt)}</span>
+                <h3 className="history-title">{item.title || 'Untitled Draft'}</h3>
+                <div className="history-meta">
+                  <div className="date-badge">
+                    <span className="date-label">Created</span>
+                    <span className="history-date">{formatDate(item.createdAt)}</span>
+                  </div>
+                  {item.updatedAt && formatDate(item.createdAt) !== formatDate(item.updatedAt) && (
+                    <div className="date-badge update-badge">
+                      <span className="date-label">Edited</span>
+                      <span className="history-date">{formatDate(item.updatedAt)}</span>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="history-content">
                 {/* Preserve whitespace visually */}
