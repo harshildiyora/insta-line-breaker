@@ -108,22 +108,25 @@ const HistoryPage = () => {
               <div className="history-card-footer">
                 <button 
                   onClick={() => handleDelete(item._id)} 
-                  className="btn-icon text-red"
+                  className="btn-icon text-red delete-btn"
+                  title="Delete Draft"
                 >
-                  <Trash2 size={16} /> Delete
+                  <Trash2 size={16} /> <span className="btn-text">Delete</span>
                 </button>
-                <div style={{display: 'flex', gap: '0.5rem'}}>
+                <div className="history-card-actions">
                   <button 
                     onClick={() => handleEdit(item)} 
                     className="btn-secondary btn-icon btn-sm"
+                    title="Edit Draft"
                   >
-                    <Edit2 size={16} /> Edit
+                    <Edit2 size={16} /> <span className="btn-text">Edit</span>
                   </button>
                   <button 
                     onClick={() => handleCopy(item.content)} 
                     className="btn-primary btn-icon btn-sm"
+                    title="Copy to Clipboard"
                   >
-                    <Copy size={16} /> Copy
+                    <Copy size={16} /> <span className="btn-text">Copy</span>
                   </button>
                 </div>
               </div>
