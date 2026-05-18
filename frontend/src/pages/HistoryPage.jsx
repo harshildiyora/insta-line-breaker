@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Copy, Trash2, Clock, Edit2 } from 'lucide-react';
+import { Copy, Trash2, Clock, Edit2, Search } from 'lucide-react';
 import './HistoryPage.css';
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFilter, setSearchFilter] = useState('both'); // 'title', 'content', 'both'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,11 +69,56 @@ const HistoryPage = () => {
     return <div className="history-container"><p>Loading history...</p></div>;
   }
 
+  const filteredHistory = history.filter(item => {
+    if (!searchQuery.trim()) return true;
+    
+    const query = searchQuery.toLowerCase();
+    const titleMatch = item.title && item.title.toLowerCase().includes(query);
+    const contentMatch = item.content && item.content.toLowerCase().includes(query);
+    
+    if (searchFilter === 'title') return titleMatch;
+    if (searchFilter === 'content') return contentMatch;
+    return titleMatch || contentMatch;
+  });
+
   return (
     <div className="history-container animate-fade-in">
       <div className="history-header">
         <h2>Your Saved Drafts</h2>
         <p className="history-subtitle">Manage and reuse your formatted Instagram captions</p>
+      </div>
+
+      <div className="history-search-section">
+        <div className="search-input-wrapper">
+          <Search className="search-icon" size={18} />
+          <input 
+            type="text" 
+            placeholder="Search drafts..." 
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="search-filters">
+          <button 
+            className={`filter-btn ${searchFilter === 'both' ? 'active' : ''}`}
+            onClick={() => setSearchFilter('both')}
+          >
+            Both
+          </button>
+          <button 
+            className={`filter-btn ${searchFilter === 'title' ? 'active' : ''}`}
+            onClick={() => setSearchFilter('title')}
+          >
+            Title
+          </button>
+          <button 
+            className={`filter-btn ${searchFilter === 'content' ? 'active' : ''}`}
+            onClick={() => setSearchFilter('content')}
+          >
+            Text
+          </button>
+        </div>
       </div>
 
       {message && <div className="toast-message-history">{message}</div>}
@@ -82,9 +129,15 @@ const HistoryPage = () => {
           <h3>No drafts yet</h3>
           <p>Go to the editor to save your first beautifully formatted caption.</p>
         </div>
+      ) : filteredHistory.length === 0 ? (
+        <div className="empty-history glass-panel">
+          <Search size={48} className="empty-icon" />
+          <h3>No results found</h3>
+          <p>We couldn't find any drafts matching your search.</p>
+        </div>
       ) : (
         <div className="history-grid">
-          {history.map((item) => (
+          {filteredHistory.map((item) => (
             <div key={item._id} className="history-card glass-panel">
               <div className="history-card-header">
                 <h3 className="history-title">{item.title || 'Untitled Draft'}</h3>
